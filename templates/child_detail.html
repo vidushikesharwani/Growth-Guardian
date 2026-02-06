@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Child Detail - Growth Guardian</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 2rem;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .back-link {
+            display: inline-block;
+            color: white;
+            text-decoration: none;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            padding: 0.5rem 1rem;
+            background: rgba(255,255,255,0.2);
+            border-radius: 8px;
+        }
+
+        .profile-card {
+            background: white;
+            border-radius: 20px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+
+        .profile-card h1 {
+            color: #333;
+            margin-bottom: 1rem;
+        }
+
+        .tabs {
+            background: white;
+            border-radius: 15px;
+            padding: 1rem;
+            margin-bottom: 2rem;
+            display: flex;
+            gap: 1rem;
+        }
+
+        .tab-button {
+            flex: 1;
+            padding: 1rem;
+            border: none;
+            background: #f5f5f5;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .tab-button:hover {
+            background: #e0e0e0;
+        }
+
+        .tab-button.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .tab-content {
+            background: white;
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .section-header h2 {
+            color: #333;
+            margin-bottom: 1.5rem;
+        }
+
+        .milestone-item {
+            background: #f9f9f9;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            border-radius: 10px;
+            border-left: 4px solid #28a745;
+        }
+
+        .vaccine-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .vaccine-item {
+            display: flex;
+            align-items: center;
+            background: #f9f9f9;
+            padding: 1.5rem;
+            border-radius: 10px;
+            border-left: 4px solid #ddd;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .vaccine-item:hover {
+            background: #f0f0f0;
+        }
+
+        .vaccine-item.completed {
+            border-left-color: #28a745;
+            background: #f0f9f4;
+            opacity: 0.8;
+        }
+
+        .vaccine-item.upcoming {
+            border-left-color: #17a2b8;
+            background: #f0f9ff;
+        }
+
+        .vaccine-item.overdue {
+            border-left-color: #dc3545;
+            background: #fff5f5;
+        }
+
+        .vaccine-checkbox-input {
+            width: 28px;
+            height: 28px;
+            cursor: pointer;
+            margin-right: 1.5rem;
+            flex-shrink: 0;
+            accent-color: #667eea;
+        }
+
+        .vaccine-info {
+            flex-grow: 1;
+        }
+
+        .vaccine-info h3 {
+            margin: 0 0 0.5rem 0;
+            color: #333;
+        }
+
+        .vaccine-info p {
+            margin: 0;
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .vaccine-status {
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+
+        .vaccine-status.done {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .vaccine-status.pending {
+            background: #d1ecf1;
+            color: #0c5460;
+        }
+
+        .vaccine-status.overdue {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .chart-placeholder {
+            text-align: center;
+            padding: 3rem;
+            background: #f9f9f9;
+            border-radius: 15px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="dashboard.html" class="back-link">← Back to Dashboard</a>
+
+        <div class="profile-card">
+            <h1>👦 Aarav Kumar</h1>
+            <p>Born: 15 Jan 2023 | Age: 1 year 2 months | Weight: 10.2 kg</p>
+        </div>
+
+        <div class="tabs">
+            <button class="tab-button active" onclick="showTab(1)">📊 Milestones</button>
+            <button class="tab-button" onclick="showTab(2)">💉 Vaccinations</button>
+            <button class="tab-button" onclick="showTab(3)">📈 Growth Chart</button>
+        </div>
+
+        <!-- TAB 1: Milestones -->
+        <div id="tab1" class="tab-content">
+            <div class="section-header">
+                <h2>Development Milestones</h2>
+            </div>
+            <div class="milestone-item">
+                <h3>✅ Sits without support</h3>
+                <p>Achieved at 7 months • Expected: 6-8 months</p>
+                <p><strong>Status: On Track</strong></p>
+            </div>
+            <div class="milestone-item">
+                <h3>✅ Crawls forward</h3>
+                <p>Achieved at 9 months • Expected: 8-10 months</p>
+                <p><strong>Status: On Track</strong></p>
+            </div>
+            <div class="milestone-item">
+                <h3>⚠️ Says first words</h3>
+                <p>Not achieved yet • Expected: 10-14 months</p>
+                <p><strong>Status: Mild Delay</strong></p>
+            </div>
+        </div>
+
+        <!-- TAB 2: Vaccinations -->
+        <div id="tab2" class="tab-content hidden">
+            <div class="section-header">
+                <h2>Vaccination Schedule</h2>
+            </div>
+
+            <div class="vaccine-list">
+                <!-- Vaccine Item 1 - Completed -->
+                <div class="vaccine-item completed" onclick="toggleVaccine(this)">
+                    <input type="checkbox" class="vaccine-checkbox-input" checked onclick="event.stopPropagation();">
+                    <div class="vaccine-info">
+                        <h3>BCG (Tuberculosis)</h3>
+                        <p>Due: At birth • Given: 16 Jan 2023</p>
+                    </div>
+                    <span class="vaccine-status done">✓ Completed</span>
+                </div>
+
+                <!-- Vaccine Item 2 - Completed -->
+                <div class="vaccine-item completed" onclick="toggleVaccine(this)">
+                    <input type="checkbox" class="vaccine-checkbox-input" checked onclick="event.stopPropagation();">
+                    <div class="vaccine-info">
+                        <h3>Hepatitis B - 1st Dose</h3>
+                        <p>Due: At birth • Given: 16 Jan 2023</p>
+                    </div>
+                    <span class="vaccine-status done">✓ Completed</span>
+                </div>
+
+                <!-- Vaccine Item 3 - Upcoming -->
+                <div class="vaccine-item upcoming" onclick="toggleVaccine(this)">
+                    <input type="checkbox" class="vaccine-checkbox-input" onclick="event.stopPropagation();">
+                    <div class="vaccine-info">
+                        <h3>MMR (Measles, Mumps, Rubella)</h3>
+                        <p>Due: 15 Apr 2024 (at 15 months)</p>
+                    </div>
+                    <span class="vaccine-status pending">Upcoming</span>
+                </div>
+
+                <!-- Vaccine Item 4 - Overdue -->
+                <div class="vaccine-item overdue" onclick="toggleVaccine(this)">
+                    <input type="checkbox" class="vaccine-checkbox-input" onclick="event.stopPropagation();">
+                    <div class="vaccine-info">
+                        <h3>DPT - 3rd Dose</h3>
+                        <p>Due: 15 Sep 2023 • Overdue by 4 months</p>
+                    </div>
+                    <span class="vaccine-status overdue">⚠️ Overdue</span>
+                </div>
+
+                <!-- Vaccine Item 5 -->
+                <div class="vaccine-item upcoming" onclick="toggleVaccine(this)">
+                    <input type="checkbox" class="vaccine-checkbox-input" onclick="event.stopPropagation();">
+                    <div class="vaccine-info">
+                        <h3>Polio - 3rd Dose</h3>
+                        <p>Due: 15 May 2024</p>
+                    </div>
+                    <span class="vaccine-status pending">Upcoming</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 3: Growth Chart -->
+        <div id="tab3" class="tab-content hidden">
+            <div class="section-header">
+                <h2>Growth Tracking</h2>
+            </div>
+            <div class="chart-placeholder">
+                <div style="font-size: 4rem; margin-bottom: 1rem;">📊</div>
+                <h3>Growth Chart Coming Soon</h3>
+                <p>Chart.js will display weight/height trends here</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function showTab(tabNumber) {
+            // Hide all tabs
+            document.getElementById('tab1').classList.add('hidden');
+            document.getElementById('tab2').classList.add('hidden');
+            document.getElementById('tab3').classList.add('hidden');
+
+            // Remove active from all buttons
+            const buttons = document.querySelectorAll('.tab-button');
+            buttons.forEach(btn => btn.classList.remove('active'));
+
+            // Show selected tab
+            document.getElementById('tab' + tabNumber).classList.remove('hidden');
+
+            // Make clicked button active
+            buttons[tabNumber - 1].classList.add('active');
+        }
+
+        function toggleVaccine(vaccineItem) {
+            // Find the checkbox inside this vaccine item
+            const checkbox = vaccineItem.querySelector('.vaccine-checkbox-input');
+            const statusBadge = vaccineItem.querySelector('.vaccine-status');
+            
+            // Toggle the checkbox
+            checkbox.checked = !checkbox.checked;
+            
+            // Update the visual style based on checkbox state
+            if (checkbox.checked) {
+                // Mark as completed
+                vaccineItem.classList.remove('upcoming', 'overdue');
+                vaccineItem.classList.add('completed');
+                statusBadge.textContent = '✓ Completed';
+                statusBadge.className = 'vaccine-status done';
+            } else {
+                // Mark as pending
+                vaccineItem.classList.remove('completed', 'overdue');
+                vaccineItem.classList.add('upcoming');
+                statusBadge.textContent = 'Pending';
+                statusBadge.className = 'vaccine-status pending';
+            }
+        }
+    </script>
+</body>
+</html>

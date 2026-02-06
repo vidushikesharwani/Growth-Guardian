@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Growth Guardian</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 2rem;
+        }
+
+        .navbar {
+            background: white;
+            padding: 1rem 2rem;
+            border-radius: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            max-width: 1200px;
+            margin-left: auto;
+            margin-right: auto;
+            margin-bottom: 2rem;
+        }
+
+        .navbar h2 {
+            color: #667eea;
+            margin: 0;
+        }
+
+        .nav-links a {
+            margin-left: 2rem;
+            text-decoration: none;
+            color: #667eea;
+            font-weight: 600;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .dashboard-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: white;
+            padding: 1.5rem 2rem;
+            border-radius: 15px;
+            margin-bottom: 2rem;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .dashboard-header h2 {
+            color: #333;
+            margin: 0;
+        }
+
+        .btn {
+            padding: 12px 30px;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: 600;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            transition: transform 0.3s;
+            display: inline-block;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .children-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .child-card {
+            background: white;
+            border-radius: 15px;
+            padding: 1.5rem;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
+        }
+
+        .child-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+        }
+
+        .child-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid #f0f0f0;
+        }
+
+        .child-avatar {
+            font-size: 3rem;
+            margin-right: 1rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .child-info h3 {
+            margin: 0;
+            color: #333;
+        }
+
+        .child-age {
+            color: #666;
+            margin-top: 0.3rem;
+        }
+
+        .child-details {
+            margin-bottom: 1.5rem;
+        }
+
+        .detail-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.7rem 0;
+            border-bottom: 1px solid #f5f5f5;
+        }
+
+        .detail-label {
+            font-weight: 600;
+            color: #555;
+        }
+
+        .status-badge {
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .status-normal {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .status-warning {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .child-actions {
+            display: flex;
+            gap: 0.8rem;
+        }
+
+        .btn-small {
+            padding: 8px 16px;
+            font-size: 0.9rem;
+            flex: 1;
+            text-align: center;
+            border-radius: 8px;
+        }
+
+        .btn-secondary {
+            background: #f7f7f7;
+            color: #667eea;
+            border: 2px solid #667eea;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div style="display: flex; align-items: center; gap: 0.5rem;">
+   <img src="logo1.png.jpeg" alt="Growth Guardian Logo" style="height: 40px;">
+    <h2>Growth Guardian</h2>
+</div>
+        <div class="nav-links">
+    <a href="index.html">Home</a>
+    <a href="add_child.html">Add Child</a>
+    <a href="dashboard.html">Dashboard</a>
+    <a href="consultation.html">Consult Doctor</a>
+</div>
+    </nav>
+
+    <div class="container">
+        <div class="dashboard-header">
+            <h2>Children Dashboard</h2>
+            <a href="add_child.html" class="btn">+ Add New Child</a>
+        </div>
+
+        <div class="children-grid">
+            <div class="child-card">
+                <div class="child-header">
+                    <div class="child-avatar">👦</div>
+                    <div class="child-info">
+                        <h3>Aarav Kumar</h3>
+                        <p class="child-age">1 year 2 months</p>
+                    </div>
+                </div>
+                
+                <div class="child-details">
+                    <div class="detail-item">
+                        <span class="detail-label">DOB:</span>
+                        <span>15 Jan 2023</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Gender:</span>
+                        <span>Male</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Status:</span>
+                        <span class="status-badge status-normal">✅ All Normal</span>
+                    </div>
+                </div>
+
+                <div class="child-actions">
+                    <a href="child_detail.html" class="btn btn-small btn-secondary">View Details</a>
+                    <a href="add_milestone.html" class="btn btn-small">Add Milestone</a>
+                </div>
+            </div>
+
+            <div class="child-card">
+                <div class="child-header">
+                    <div class="child-avatar">👧</div>
+                    <div class="child-info">
+                        <h3>Priya Sharma</h3>
+                        <p class="child-age">8 months</p>
+                    </div>
+                </div>
+                
+                <div class="child-details">
+                    <div class="detail-item">
+                        <span class="detail-label">DOB:</span>
+                        <span>10 Jun 2024</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Gender:</span>
+                        <span>Female</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Status:</span>
+                        <span class="status-badge status-warning">⚠️ Mild Delay</span>
+                    </div>
+                </div>
+
+                <div class="child-actions">
+                    <a href="child_detail.html" class="btn btn-small btn-secondary">View Details</a>
+                    <a href="add_milestone.html" class="btn btn-small">Add Milestone</a>
+                </div>
+            </div>
+
+            <div class="child-card">
+                <div class="child-header">
+                    <div class="child-avatar">👦</div>
+                    <div class="child-info">
+                        <h3>Rohan Patel</h3>
+                        <p class="child-age">2 years 4 months</p>
+                    </div>
+                </div>
+                
+                <div class="child-details">
+                    <div class="detail-item">
+                        <span class="detail-label">DOB:</span>
+                        <span>20 Sep 2022</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Gender:</span>
+                        <span>Male</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Status:</span>
+                        <span class="status-badge status-normal">✅ All Normal</span>
+                    </div>
+                </div>
+
+                <div class="child-actions">
+                    <a href="child_detail.html" class="btn btn-small btn-secondary">View Details</a>
+                    <a href="add_milestone.html" class="btn btn-small">Add Milestone</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book Consultation - Growth Guardian</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 2rem;
+        }
+
+        .navbar {
+            background: white;
+            padding: 1rem 2rem;
+            border-radius: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            max-width: 1200px;
+            margin-left: auto;
+            margin-right: auto;
+            margin-bottom: 2rem;
+        }
+
+        .navbar h2 {
+            color: #667eea;
+            margin: 0;
+        }
+
+        .nav-links a {
+            margin-left: 2rem;
+            text-decoration: none;
+            color: #667eea;
+            font-weight: 600;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .page-header {
+            background: white;
+            border-radius: 20px;
+            padding: 2.5rem;
+            text-align: center;
+            margin-bottom: 2rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+        }
+
+        .page-header h1 {
+            color: #333;
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .page-header p {
+            color: #666;
+            font-size: 1.1rem;
+        }
+
+        .content-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .doctors-section {
+            background: white;
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+
+        .doctors-section h2 {
+            color: #333;
+            margin-bottom: 1.5rem;
+        }
+
+        .doctor-card {
+            background: #f9f9f9;
+            border-radius: 15px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            display: flex;
+            gap: 1.5rem;
+            transition: transform 0.3s, box-shadow 0.3s;
+            cursor: pointer;
+            border: 3px solid transparent;
+        }
+
+        .doctor-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .doctor-card.selected {
+            border-color: #667eea;
+            background: #f0f4ff;
+        }
+
+        .doctor-avatar {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            flex-shrink: 0;
+        }
+
+        .doctor-info {
+            flex-grow: 1;
+        }
+
+        .doctor-info h3 {
+            color: #333;
+            margin-bottom: 0.5rem;
+        }
+
+        .doctor-specialty {
+            color: #667eea;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .doctor-details {
+            color: #666;
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+
+        .doctor-rating {
+            color: #ffa500;
+            margin-top: 0.5rem;
+        }
+
+        .doctor-price {
+            background: #667eea;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-weight: 600;
+            text-align: center;
+            margin-top: 0.5rem;
+        }
+
+        .booking-panel {
+            background: white;
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 2rem;
+        }
+
+        .booking-panel h3 {
+            color: #333;
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #333;
+            font-weight: 600;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 16px;
+            font-family: inherit;
+            transition: border-color 0.3s;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .time-slots {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 0.8rem;
+            margin-top: 0.5rem;
+        }
+
+        .time-slot {
+            padding: 0.8rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 600;
+        }
+
+        .time-slot:hover {
+            border-color: #667eea;
+            background: #f0f4ff;
+        }
+
+        .time-slot.selected {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+        }
+
+        .time-slot.unavailable {
+            opacity: 0.3;
+            cursor: not-allowed;
+        }
+
+        .price-summary {
+            background: #f9f9f9;
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin-bottom: 1.5rem;
+        }
+
+        .price-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.8rem;
+            color: #666;
+        }
+
+        .price-row.total {
+            border-top: 2px solid #e0e0e0;
+            padding-top: 0.8rem;
+            margin-top: 0.8rem;
+            font-weight: 700;
+            font-size: 1.2rem;
+            color: #333;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 15px;
+            border: none;
+            border-radius: 10px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .feature-box {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .feature-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .feature-box h4 {
+            color: #333;
+            margin-bottom: 0.5rem;
+        }
+
+        .feature-box p {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 768px) {
+            .content-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .booking-panel {
+                position: static;
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+   <nav class="navbar">
+    <div style="display: flex; align-items: center; gap: 0.5rem;">
+        <img src="logo1.png.jpeg" alt="Growth Guardian Logo" style="height: 40px;">
+        <h2 style="color: #667eea; margin: 0;">Growth Guardian</h2>
+    </div>
+    <div class="nav-links">
+        <a href="index.html">Home</a>
+        <a href="add_child.html">Add Child</a>
+        <a href="dashboard.html">Dashboard</a>
+        
+    </div>
+</nav>
+
+    <div class="container">
+        <div class="page-header">
+            <h1>👨‍⚕️ Book Pediatric Consultation</h1>
+            <p>Connect with experienced pediatricians for your child's health concerns</p>
+        </div>
+
+        <div class="content-grid">
+            <!-- Left: Doctors List -->
+            <div class="doctors-section">
+                <h2>Choose Your Pediatrician</h2>
+
+                <!-- Doctor 1 -->
+                <div class="doctor-card" onclick="selectDoctor(this, 'Dr. Priya Sharma', 200)">
+                    <div class="doctor-avatar">👩‍⚕️</div>
+                    <div class="doctor-info">
+                        <h3>Dr. Priya Sharma</h3>
+                        <div class="doctor-specialty">Pediatrician & Child Development Specialist</div>
+                        <div class="doctor-details">
+                            • MBBS, MD (Pediatrics)<br>
+                            • 12 years experience<br>
+                            • Expert in milestone delays & growth issues
+                        </div>
+                        <div class="doctor-rating">⭐⭐⭐⭐⭐ 4.9 (250+ consultations)</div>
+                        <div class="doctor-price">₹200 / 30 min session</div>
+                    </div>
+                </div>
+
+                <!-- Doctor 2 -->
+                <div class="doctor-card" onclick="selectDoctor(this, 'Dr. Rajesh Kumar', 300)">
+                    <div class="doctor-avatar">👨‍⚕️</div>
+                    <div class="doctor-info">
+                        <h3>Dr. Rajesh Kumar</h3>
+                        <div class="doctor-specialty">Senior Pediatrician & Neonatologist</div>
+                        <div class="doctor-details">
+                            • MBBS, DCH, DNB (Pediatrics)<br>
+                            • 18 years experience<br>
+                            • Specialist in newborn & infant care
+                        </div>
+                        <div class="doctor-rating">⭐⭐⭐⭐⭐ 4.8 (400+ consultations)</div>
+                        <div class="doctor-price">₹300 / 30 min session</div>
+                    </div>
+                </div>
+
+                <!-- Doctor 3 -->
+                <div class="doctor-card" onclick="selectDoctor(this, 'Dr. Anita Patel', 250)">
+                    <div class="doctor-avatar">👩‍⚕️</div>
+                    <div class="doctor-info">
+                        <h3>Dr. Anita Patel</h3>
+                        <div class="doctor-specialty">Pediatrician & Vaccination Expert</div>
+                        <div class="doctor-details">
+                            • MBBS, MD (Pediatrics)<br>
+                            • 10 years experience<br>
+                            • Expert in immunization & preventive care
+                        </div>
+                        <div class="doctor-rating">⭐⭐⭐⭐⭐ 4.9 (180+ consultations)</div>
+                        <div class="doctor-price">₹250 / 30 min session</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right: Booking Form -->
+            <div class="booking-panel">
+                <h3>Book Appointment</h3>
+
+                <form id="bookingForm">
+                    <div class="form-group">
+                        <label>Selected Doctor</label>
+                        <input type="text" id="selectedDoctor" readonly placeholder="Select a doctor from left" style="background: #f5f5f5;">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="childSelect">Select Child *</label>
+                        <select id="childSelect" required>
+                            <option value="">Choose...</option>
+                            <option value="1">Aarav Kumar (1 year 2 months)</option>
+                            <option value="2">Priya Sharma (8 months)</option>
+                            <option value="3">Rohan Patel (2 years 4 months)</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="appointmentDate">Appointment Date *</label>
+                        <input type="date" id="appointmentDate" required min="" onchange="loadTimeSlots()">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Select Time Slot *</label>
+                        <div class="time-slots" id="timeSlots">
+                            <div class="time-slot" onclick="selectTimeSlot(this)">10:00 AM</div>
+                            <div class="time-slot" onclick="selectTimeSlot(this)">11:00 AM</div>
+                            <div class="time-slot unavailable">12:00 PM</div>
+                            <div class="time-slot" onclick="selectTimeSlot(this)">2:00 PM</div>
+                            <div class="time-slot" onclick="selectTimeSlot(this)">3:00 PM</div>
+                            <div class="time-slot" onclick="selectTimeSlot(this)">4:00 PM</div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="concern">Chief Concern / Reason for Visit *</label>
+                        <textarea id="concern" rows="3" required placeholder="E.g., Child not speaking at 18 months, concerns about growth, vaccination queries..."></textarea>
+                    </div>
+
+                    <div class="price-summary">
+                        <div class="price-row">
+                            <span>Consultation Fee</span>
+                            <span id="consultationFee">₹0</span>
+                        </div>
+                        <div class="price-row">
+                            <span>Platform Fee</span>
+                            <span>₹50</span>
+                        </div>
+                        <div class="price-row total">
+                            <span>Total Amount</span>
+                            <span id="totalAmount">₹0</span>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn" id="bookBtn" disabled>Select Doctor to Continue</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Features Section -->
+        <div class="features-grid">
+            <div class="feature-box">
+                <div class="feature-icon">💬</div>
+                <h4>Video Consultation</h4>
+                <p>Connect with doctors via secure video call from home</p>
+            </div>
+            <div class="feature-box">
+                <div class="feature-icon">📋</div>
+                <h4>Digital Prescription</h4>
+                <p>Receive prescriptions and reports digitally after consultation</p>
+            </div>
+            <div class="feature-box">
+                <div class="feature-icon">🔒</div>
+                <h4>Secure & Private</h4>
+                <p>Your child's medical data is encrypted and confidential</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let selectedDoctorPrice = 0;
+
+        // Set minimum date to today
+        document.getElementById('appointmentDate').min = new Date().toISOString().split('T')[0];
+
+        function selectDoctor(card, doctorName, price) {
+            // Remove selection from all cards
+            document.querySelectorAll('.doctor-card').forEach(c => c.classList.remove('selected'));
+            
+            // Select this card
+            card.classList.add('selected');
+            
+            // Update booking form
+            document.getElementById('selectedDoctor').value = doctorName;
+            selectedDoctorPrice = price;
+            
+            // Update pricing
+            document.getElementById('consultationFee').textContent = '₹' + price;
+            document.getElementById('totalAmount').textContent = '₹' + (price + 50);
+            
+            // Enable book button
+            document.getElementById('bookBtn').disabled = false;
+            document.getElementById('bookBtn').textContent = 'Proceed to Payment';
+        }
+
+        function selectTimeSlot(slot) {
+            if (slot.classList.contains('unavailable')) return;
+            
+            // Remove selection from all slots
+            document.querySelectorAll('.time-slot').forEach(s => s.classList.remove('selected'));
+            
+            // Select this slot
+            slot.classList.add('selected');
+        }
+
+        function loadTimeSlots() {
+            // In real app, this would fetch available slots from backend
+            // For now, just show demo slots
+        }
+
+        document.getElementById('bookingForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const doctor = document.getElementById('selectedDoctor').value;
+            const child = document.getElementById('childSelect').options[document.getElementById('childSelect').selectedIndex].text;
+            const date = document.getElementById('appointmentDate').value;
+            const timeSlot = document.querySelector('.time-slot.selected');
+            const concern = document.getElementById('concern').value;
+            
+            if (!doctor) {
+                alert('Please select a doctor');
+                return;
+            }
+            
+            if (!timeSlot) {
+                alert('Please select a time slot');
+                return;
+            }
+            
+            // Show confirmation
+            const confirmation = `
+Booking Confirmed! 🎉
+
+Doctor: ${doctor}
+Child: ${child}
+Date: ${date}
+Time: ${timeSlot.textContent}
+Amount: ${document.getElementById('totalAmount').textContent}
+
+You will receive a confirmation email with video call link shortly.
+            `;
+            
+            alert(confirmation);
+            
+            // In real app, this would redirect to payment gateway
+            // Then send confirmation email and calendar invite
+        });
+    </script>
+</body>
+</html>

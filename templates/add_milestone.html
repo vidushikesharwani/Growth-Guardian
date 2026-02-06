@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Milestone - Growth Guardian</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 2rem;
+        }
+
+        .navbar {
+            background: white;
+            padding: 1rem 2rem;
+            border-radius: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            max-width: 1200px;
+            margin-left: auto;
+            margin-right: auto;
+            margin-bottom: 2rem;
+        }
+
+        .navbar h2 {
+            color: #667eea;
+            margin: 0;
+        }
+
+        .nav-links a {
+            margin-left: 2rem;
+            text-decoration: none;
+            color: #667eea;
+            font-weight: 600;
+        }
+
+        .container {
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .back-link {
+            display: inline-block;
+            color: white;
+            text-decoration: none;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            padding: 0.5rem 1rem;
+            background: rgba(255,255,255,0.2);
+            border-radius: 8px;
+        }
+
+        .form-card {
+            background: white;
+            padding: 3rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+        }
+
+        .form-card h2 {
+            color: #333;
+            margin-bottom: 0.5rem;
+            font-size: 2rem;
+        }
+
+        .form-subtitle {
+            color: #666;
+            margin-bottom: 2rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #333;
+            font-weight: 600;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 16px;
+            font-family: inherit;
+            transition: border-color 0.3s;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .radio-group {
+            display: flex;
+            gap: 2rem;
+            margin-top: 0.5rem;
+        }
+
+        .radio-group label {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: normal;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 15px;
+            border: none;
+            border-radius: 10px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 1rem;
+            transition: transform 0.3s;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+       <div style="display: flex; align-items: center; gap: 0.5rem;">
+   <img src="logo1.png.jpeg" alt="Growth Guardian Logo" style="height: 40px;">
+    <h2>Growth Guardian</h2>
+</div>
+        <div class="nav-links">
+    <a href="index.html">Home</a>
+    <a href="add_child.html">Add Child</a>
+    <a href="dashboard.html">Dashboard</a>
+    <a href="consultation.html">Consult Doctor</a>
+</div>
+    </nav>
+
+    <div class="container">
+        <a href="child_detail.html" class="back-link">← Back to Child Details</a>
+
+        <div class="form-card">
+            <h2>Add Milestone</h2>
+            <p class="form-subtitle">Record a developmental milestone for Aarav Kumar</p>
+            
+            <form>
+                <div class="form-group">
+                    <label for="age_months">Child's Age (months) *</label>
+                    <input type="number" id="age_months" name="age_months" required placeholder="e.g., 12">
+                </div>
+
+                <div class="form-group">
+                    <label for="category">Category *</label>
+                    <select id="category" name="category" required>
+                        <option value="">Select category...</option>
+                        <option value="Motor">Motor Skills</option>
+                        <option value="Speech">Speech & Language</option>
+                        <option value="Social">Social & Emotional</option>
+                        <option value="Cognitive">Cognitive</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="milestone">Milestone *</label>
+                    <select id="milestone" name="milestone_name" required>
+                        <option value="">Select milestone...</option>
+                        <option value="Sits without support">Sits without support</option>
+                        <option value="Crawls">Crawls</option>
+                        <option value="Walks">Walks independently</option>
+                        <option value="First words">Says first words</option>
+                        <option value="Points">Points at objects</option>
+                        <option value="Drinks from cup">Drinks from cup</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Achieved? *</label>
+                    <div class="radio-group">
+                        <label>
+                            <input type="radio" name="achieved" value="yes" required> Yes
+                        </label>
+                        <label>
+                            <input type="radio" name="achieved" value="no" required> No
+                        </label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="notes">Notes (optional)</label>
+                    <textarea id="notes" name="notes" rows="3" placeholder="Any additional observations..."></textarea>
+                </div>
+
+                <button type="submit" class="btn">Save Milestone</button>
+            </form>
+        </div>
+    </div>
+</body>
+</html>
+
+
