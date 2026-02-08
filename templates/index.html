@@ -135,26 +135,26 @@
     </style>
 </head>
 <body>
-    <div class="container">
-        <nav class="navbar">
-            <div style="display: flex; align-items: center; gap: 0.5rem;">
-    <img src="logo1.png.jpeg" alt="Growth Guardian Logo" style="height: 40px;">
-    <h2>Growth Guardian</h2>
-</div> 
-      <div class="nav-links">
-    <a href="{{ url_for('add_child') }}">Add Child</a>
-    <a href="{{ url_for('dashboard') }}">Dashboard</a>
-    <a href="{{ url_for('consultation') }}">Consult Doctor</a>
-</div>
-        </nav>
+    <nav class="navbar">
+    <div style="display: flex; align-items: center; gap: 0.5rem;">
+        <img src="{{ url_for('static', filename='logo1.png.jpeg') }}" alt="Growth Guardian Logo" style="height: 40px;">
+        <h2 style="color: #667eea; margin: 0;">Growth Guardian</h2>
+    </div>
+    <div class="nav-links">
+        <a href="{{ url_for('index') }}">Home</a>
+        <a href="{{ url_for('add_child') }}">Add Child</a>
+        <a href="{{ url_for('dashboard') }}">Dashboard</a>
+        <a href="{{ url_for('consultation') }}">Consult Doctor</a>
+    </div>
+</nav>
 
         <div class="hero">
-            <h1>Welcome to Growth Guardian</h1>
-            <p>Track your child's growth, milestones, and vaccinations</p>
-            <div class="action-buttons">
-                <a href="add_child.html" class="btn btn-primary">Add New Child</a>
-                <a href="dashboard.html" class="btn btn-secondary">View Dashboard</a>
-            </div>
+     <h1>Welcome to Growth Guardian</h1>
+        <p>Track your child's growth, milestones, and vaccinations</p>
+        <div class="action-buttons">
+        <a href="add_child.html" class="btn btn-primary">Add New Child</a>
+        <a href="dashboard.html" class="btn btn-secondary">View Dashboard</a>
+        </div>
         </div>
 
         <div class="features">
