@@ -10,8 +10,8 @@ CORS(app)  # Allow frontend to make requests
 # ===== DATABASE HELPER =====
 def get_db():
     """Get database connection"""
-    conn = sqlite3.connect('database.db')
-    conn.row_factory = sqlite3.Row  # Return rows as dictionaries
+    conn = sqlite3.connect('database.db', timeout=10, check_same_thread=False)
+    conn.row_factory = sqlite3.Row
     return conn
 
 
@@ -169,8 +169,10 @@ def api_add_child():
     # Auto-generate vaccination schedule for this child
     create_vaccination_schedule(child_id, data['date_of_birth'])
     
-    conn.commit()
-    conn.close()
+    try:
+        conn.commit()
+    finally:
+        conn.close()
     
     from flask import redirect
     return redirect('/dashboard')
@@ -228,8 +230,10 @@ def api_add_milestone():
           data['achieved'], date.today(), risk_level))
     
     milestone_id = cursor.lastrowid
-    conn.commit()
-    conn.close()
+    try:
+        conn.commit()
+    finally:
+        conn.close()
     
     return jsonify({
         'id': milestone_id,
