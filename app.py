@@ -47,10 +47,17 @@ def consultation():
     return render_template('consultation.html')
 
 
-@app.route('/add_milestone')
-def add_milestone_page():
-    """Add milestone page"""
-    return render_template('add_milestone.html')
+@app.route('/child/<int:child_id>/add_milestone')
+def add_milestone_page(child_id):
+    """Add milestone page for specific child"""
+    conn = get_db()
+    child = conn.execute('SELECT * FROM children WHERE id = ?', (child_id,)).fetchone()
+    conn.close()
+    
+    if not child:
+        return "Child not found", 404
+    
+    return render_template('add_milestone.html', child=dict(child))
 
 
 @app.route('/dashboard')
