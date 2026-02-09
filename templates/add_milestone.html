@@ -164,13 +164,11 @@
             <p class="form-subtitle">Record a developmental milestone for Aarav Kumar</p>
             
             <form action="{{ url_for('api_add_milestone') }}" method="POST">
-    <!-- ✅ ADD THIS HIDDEN FIELD -->
     <input type="hidden" name="child_id" value="{{ child_id }}">
     
-    <!-- Rest of your form fields... -->
     <div class="form-group">
         <label for="category">Category *</label>
-        <select id="category" name="category" required>
+        <select id="category" name="category" required onchange="updateMilestones()">
             <option value="">Select category...</option>
             <option value="Motor">Motor Skills</option>
             <option value="Speech">Speech & Language</option>
@@ -182,11 +180,7 @@
     <div class="form-group">
         <label for="milestone">Milestone *</label>
         <select id="milestone" name="milestone_name" required>
-            <option value="">Select milestone...</option>
-            <option value="Sits without support">Sits without support</option>
-            <option value="Crawls">Crawls</option>
-            <option value="Walks">Walks independently</option>
-            <option value="First words">Says first words</option>
+            <option value="">First select a category...</option>
         </select>
     </div>
     
@@ -202,11 +196,65 @@
         </div>
     </div>
     
+    <div class="form-group">
+        <label for="notes">Notes (optional)</label>
+        <textarea id="notes" name="notes" rows="3" placeholder="Any additional observations..."></textarea>
+    </div>
+    
     <button type="submit" class="btn">Save Milestone</button>
 </form>
-        </div>
-    </div>
-</body>
-</html>
 
+<script>
+// Category-wise milestones
+const MILESTONES_BY_CATEGORY = {
+    "Motor": [
+        "Holds head steady",
+        "Sits without support",
+        "Crawls",
+        "Pulls to stand",
+        "Walks independently",
+        "Runs",
+        "Jumps"
+    ],
+    "Speech": [
+        "Coos and babbles",
+        "Says first words",
+        "Says 2-word phrases",
+        "Says simple sentences",
+        "Tells stories"
+    ],
+    "Social": [
+        "Smiles at people",
+        "Recognizes familiar faces",
+        "Shows affection",
+        "Plays with other children",
+        "Shows independence"
+    ],
+    "Cognitive": [
+        "Follows moving objects",
+        "Recognizes familiar objects",
+        "Points at objects",
+        "Sorts shapes and colors",
+        "Understands time concepts"
+    ]
+};
 
+function updateMilestones() {
+    const category = document.getElementById('category').value;
+    const milestoneSelect = document.getElementById('milestone');
+    
+    // Clear existing options
+    milestoneSelect.innerHTML = '<option value="">Select milestone...</option>';
+    
+    if (category && MILESTONES_BY_CATEGORY[category]) {
+        // Add category-specific milestones
+        MILESTONES_BY_CATEGORY[category].forEach(milestone => {
+            const option = document.createElement('option');
+            option.value = milestone;
+            option.textContent = milestone;
+            milestoneSelect.appendChild(option);
+        });
+    }
+}
+</script>
+</div>

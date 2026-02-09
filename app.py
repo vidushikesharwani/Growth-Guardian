@@ -25,6 +25,24 @@ def calculate_age_months(date_of_birth):
     months = (today.year - dob.year) * 12 + (today.month - dob.month)
     return months
 
+def calculate_age_details(date_of_birth):
+    """Calculate age in years and months separately"""
+    if isinstance(date_of_birth, str):
+        dob = datetime.strptime(date_of_birth, '%Y-%m-%d').date()
+    else:
+        dob = date_of_birth
+    
+    today = date.today()
+    total_months = (today.year - dob.year) * 12 + (today.month - dob.month)
+    years = total_months // 12
+    months = total_months % 12
+    
+    return {
+        'total_months': total_months,
+        'age_years': years,
+        'age_months': months
+    }
+
 # ===== ROUTES (WEB PAGES) =====
 
 @app.route('/')
@@ -42,6 +60,7 @@ def consultation():
     """Consultation booking page"""
     return render_template('consultation.html')
 
+# ✅ FIXED: Added alias for HTML compatibility
 @app.route('/child/<int:child_id>/add_milestone')
 def add_milestone_page(child_id):
     """Add milestone page for specific child"""
@@ -54,6 +73,12 @@ def add_milestone_page(child_id):
     
     return render_template('add_milestone.html', child=dict(child), child_id=child_id)
 
+# ✅ FIXED: Added shorter route name for url_for compatibility
+@app.route('/add-milestone/<int:child_id>')
+def api_add_milestone_page(child_id):
+    """Alias route for add milestone"""
+    return add_milestone_page(child_id)
+
 @app.route('/dashboard')
 def dashboard():
     """Dashboard showing all children"""
@@ -64,7 +89,8 @@ def dashboard():
     children_list = []
     for child in children:
         child_dict = dict(child)
-        child_dict['age_months'] = calculate_age_months(child['date_of_birth'])
+        age_info = calculate_age_details(child['date_of_birth'])
+        child_dict.update(age_info)
         children_list.append(child_dict)
     
     return render_template('dashboard.html', children=children_list)
@@ -85,7 +111,9 @@ def child_detail(child_id):
         return "Child not found", 404
     
     child_dict = dict(child)
-    child_dict['age_months'] = calculate_age_months(child['date_of_birth'])
+    # ✅ FIXED: Add detailed age calculation
+    age_info = calculate_age_details(child['date_of_birth'])
+    child_dict.update(age_info)
     
     milestones = conn.execute('''
         SELECT * FROM milestones 
@@ -114,7 +142,8 @@ def child_detail(child_id):
                          milestones=milestones,
                          vaccinations=vaccinations,
                          growth=growth,
-                         alerts=alerts)
+                         alerts=alerts,
+                         today=date.today())
 
 # ===== API ENDPOINTS =====
 
@@ -128,7 +157,8 @@ def api_get_children():
     children_list = []
     for child in children:
         child_dict = dict(child)
-        child_dict['age_months'] = calculate_age_months(child['date_of_birth'])
+        age_info = calculate_age_details(child['date_of_birth'])
+        child_dict.update(age_info)
         children_list.append(child_dict)
     
     return jsonify(children_list)
@@ -138,7 +168,6 @@ def api_add_child():
     """Add a new child"""
     data = request.form
     
-    # ✅ FIX: Use SINGLE connection for everything
     conn = sqlite3.connect('database.db')
     conn.row_factory = sqlite3.Row
     cursor = conn.cursor()
@@ -153,7 +182,7 @@ def api_add_child():
         
         child_id = cursor.lastrowid
         
-        # ✅ Create vaccinations IN SAME CONNECTION
+        # Create vaccinations
         if isinstance(data['date_of_birth'], str):
             dob = datetime.strptime(data['date_of_birth'], '%Y-%m-%d').date()
         else:
@@ -192,7 +221,6 @@ def api_add_child():
                 VALUES (?, ?, ?, 'pending')
             ''', (child_id, vaccine_name, due_date))
         
-        # ✅ Commit everything together
         conn.commit()
         
     except Exception as e:
@@ -200,7 +228,6 @@ def api_add_child():
         print(f"Error: {e}")
         return f"Error adding child: {e}", 500
     finally:
-        # ✅ Always close connection
         conn.close()
     
     return redirect('/dashboard')
@@ -216,7 +243,8 @@ def api_get_child(child_id):
         return jsonify({'error': 'Child not found'}), 404
     
     child_dict = dict(child)
-    child_dict['age_months'] = calculate_age_months(child['date_of_birth'])
+    age_info = calculate_age_details(child['date_of_birth'])
+    child_dict.update(age_info)
     
     return jsonify(child_dict)
 
@@ -228,7 +256,6 @@ def api_add_milestone():
     child_id = int(data['child_id'])
     achieved = data.get('achieved') == 'yes'
     
-    # ✅ Use single connection with timeout
     conn = sqlite3.connect('database.db', timeout=10.0)
     conn.row_factory = sqlite3.Row
     
@@ -274,8 +301,6 @@ def api_get_available_milestones():
 
 # ----- VACCINATION APIs -----
 
-
-
 @app.route('/api/child/<int:child_id>/vaccinations', methods=['GET'])
 def api_get_vaccinations(child_id):
     """Get vaccination schedule for a child"""
@@ -289,21 +314,32 @@ def api_get_vaccinations(child_id):
     
     return jsonify([dict(v) for v in vaccines])
 
+# ✅ FIXED: Accept both JSON and form data
 @app.route('/api/vaccination/mark-given', methods=['POST'])
 def api_mark_vaccination():
     """Mark a vaccination as given"""
-    data = request.form
+    # Try JSON first, fallback to form data
+    if request.is_json:
+        data = request.get_json()
+    else:
+        data = request.form
     
     conn = get_db()
-    conn.execute('''
-        UPDATE vaccinations 
-        SET status = 'completed', given_date = ?
-        WHERE id = ?
-    ''', (data.get('given_date', date.today()), data['vaccination_id']))
-    conn.commit()
-    conn.close()
     
-    return jsonify({'status': 'success'})
+    try:
+        conn.execute('''
+            UPDATE vaccinations 
+            SET status = 'completed', given_date = ?
+            WHERE id = ?
+        ''', (data.get('given_date', str(date.today())), data['vaccination_id']))
+        conn.commit()
+        
+        return jsonify({'status': 'success', 'message': 'Vaccination marked as completed'})
+    except Exception as e:
+        conn.rollback()
+        return jsonify({'status': 'error', 'message': str(e)}), 500
+    finally:
+        conn.close()
 
 @app.route('/api/growth', methods=['POST'])
 def api_add_growth_record():
@@ -448,7 +484,8 @@ if __name__ == '__main__':
     print("    POST /api/child           - Add child")
     print("    GET  /api/children        - Get all children")
     print("    POST /api/milestone       - Add milestone")
-    print("    GET  /api/child/<id>/milestones - Get milestones")
+    print("    POST /api/vaccination/mark-given - Mark vaccine as given")
+    print("    GET  /api/child/<id>/vaccinations - Get vaccinations")
     print("\n")
     
     app.run(debug=True, port=5000)

@@ -59,6 +59,11 @@
             padding: 0.5rem 1rem;
             background: rgba(255,255,255,0.2);
             border-radius: 8px;
+            transition: background 0.3s;
+        }
+
+        .back-link:hover {
+            background: rgba(255,255,255,0.3);
         }
 
         .profile-card {
@@ -74,6 +79,11 @@
             margin-bottom: 1rem;
         }
 
+        .profile-card p {
+            color: #666;
+            font-size: 1.1rem;
+        }
+
         .tabs {
             background: white;
             border-radius: 15px;
@@ -81,6 +91,7 @@
             margin-bottom: 2rem;
             display: flex;
             gap: 1rem;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
         }
 
         .tab-button {
@@ -115,11 +126,34 @@
             display: none;
         }
 
-        .section-header h2 {
-            color: #333;
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
             margin-bottom: 1.5rem;
         }
 
+        .section-header h2 {
+            color: #333;
+            margin: 0;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 10px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: transform 0.2s;
+            display: inline-block;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+        }
+
+        /* Milestone Styles */
         .milestone-item {
             background: #f9f9f9;
             padding: 1.5rem;
@@ -128,6 +162,45 @@
             border-left: 4px solid #28a745;
         }
 
+        .milestone-item.milestone-high-risk {
+            border-left-color: #dc3545;
+        }
+
+        .milestone-item.milestone-mild-delay {
+            border-left-color: #ffc107;
+        }
+
+        .milestone-item.milestone-on-track {
+            border-left-color: #28a745;
+        }
+
+        .milestone-item h3 {
+            color: #333;
+            margin-bottom: 0.5rem;
+            font-size: 1.2rem;
+        }
+
+        .milestone-item p {
+            color: #666;
+            margin: 0.3rem 0;
+        }
+
+        .status-high-risk {
+            color: #dc3545;
+            font-weight: bold;
+        }
+
+        .status-mild-delay {
+            color: #ffc107;
+            font-weight: bold;
+        }
+
+        .status-on-track {
+            color: #28a745;
+            font-weight: bold;
+        }
+
+        /* Vaccine Styles */
         .vaccine-list {
             display: flex;
             flex-direction: column;
@@ -141,18 +214,17 @@
             padding: 1.5rem;
             border-radius: 10px;
             border-left: 4px solid #ddd;
-            cursor: pointer;
             transition: all 0.3s;
         }
 
         .vaccine-item:hover {
             background: #f0f0f0;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
         }
 
         .vaccine-item.completed {
             border-left-color: #28a745;
             background: #f0f9f4;
-            opacity: 0.8;
         }
 
         .vaccine-item.upcoming {
@@ -166,8 +238,8 @@
         }
 
         .vaccine-checkbox-input {
-            width: 28px;
-            height: 28px;
+            width: 24px;
+            height: 24px;
             cursor: pointer;
             margin-right: 1.5rem;
             flex-shrink: 0;
@@ -181,6 +253,7 @@
         .vaccine-info h3 {
             margin: 0 0 0.5rem 0;
             color: #333;
+            font-size: 1.1rem;
         }
 
         .vaccine-info p {
@@ -195,6 +268,7 @@
             font-size: 0.85rem;
             font-weight: 600;
             white-space: nowrap;
+            margin-left: 1rem;
         }
 
         .vaccine-status.done {
@@ -218,6 +292,28 @@
             background: #f9f9f9;
             border-radius: 15px;
         }
+
+        .chart-placeholder h3 {
+            color: #333;
+            margin-bottom: 0.5rem;
+        }
+
+        .chart-placeholder p {
+            color: #666;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 3rem;
+            background: #f9f9f9;
+            border-radius: 10px;
+        }
+
+        .empty-state p {
+            font-size: 1.2rem;
+            color: #666;
+            margin-bottom: 1rem;
+        }
     </style>
 </head>
 <body>
@@ -239,11 +335,13 @@
 
         <a href="{{ url_for('dashboard') }}" class="back-link">← Back to Dashboard</a>
 
+        <!-- PROFILE CARD -->
         <div class="profile-card">
-            <h1>👦 Aarav Kumar</h1>
-            <p>Born: 15 Jan 2023 | Age: 1 year 2 months | Weight: 10.2 kg</p>
+            <h1>👦 {{ child.name }}</h1>
+            <p>Born: {{ child.date_of_birth }} | Age: {{ child.age_years }} year{{ 's' if child.age_years != 1 else '' }} {{ child.age_months }} month{{ 's' if child.age_months != 1 else '' }} | Weight: {{ child.weight }} kg</p>
         </div>
 
+        <!-- TABS -->
         <div class="tabs">
             <button class="tab-button active" onclick="showTab(1)">📊 Milestones</button>
             <button class="tab-button" onclick="showTab(2)">💉 Vaccinations</button>
@@ -254,22 +352,45 @@
         <div id="tab1" class="tab-content">
             <div class="section-header">
                 <h2>Development Milestones</h2>
+                <!-- FIXED: Changed endpoint to api_add_milestone -->
+                <a href="{{ url_for('api_add_milestone', child_id=child.id) }}" class="btn">+ Add Milestone</a>
             </div>
-            <div class="milestone-item">
-                <h3>✅ Sits without support</h3>
-                <p>Achieved at 7 months • Expected: 6-8 months</p>
-                <p><strong>Status: On Track</strong></p>
-            </div>
-            <div class="milestone-item">
-                <h3>✅ Crawls forward</h3>
-                <p>Achieved at 9 months • Expected: 8-10 months</p>
-                <p><strong>Status: On Track</strong></p>
-            </div>
-            <div class="milestone-item">
-                <h3>⚠️ Says first words</h3>
-                <p>Not achieved yet • Expected: 10-14 months</p>
-                <p><strong>Status: Mild Delay</strong></p>
-            </div>
+            
+            {% if milestones %}
+                {% for milestone in milestones %}
+                <div class="milestone-item 
+                    {% if milestone.risk_level == 'high_risk' %}milestone-high-risk
+                    {% elif milestone.risk_level == 'mild_delay' %}milestone-mild-delay
+                    {% else %}milestone-on-track{% endif %}">
+                    
+                    <h3>
+                        {% if milestone.achieved %}
+                            ✅ {{ milestone.milestone_name }}
+                        {% else %}
+                            ❌ {{ milestone.milestone_name }} (Not Achieved)
+                        {% endif %}
+                    </h3>
+                    <p><strong>Category:</strong> {{ milestone.category }}</p>
+                    <p><strong>Age when assessed:</strong> {{ milestone.age_months }} months</p>
+                    <p><strong>Date:</strong> {{ milestone.date_recorded }}</p>
+                    <p><strong>Status:</strong> 
+                        {% if milestone.risk_level == 'high_risk' %}
+                            <span class="status-high-risk">⚠️ HIGH RISK - Consult Doctor</span>
+                        {% elif milestone.risk_level == 'mild_delay' %}
+                            <span class="status-mild-delay">⚡ MILD DELAY - Monitor Closely</span>
+                        {% else %}
+                            <span class="status-on-track">✅ On Track</span>
+                        {% endif %}
+                    </p>
+                </div>
+                {% endfor %}
+            {% else %}
+                <div class="empty-state">
+                    <p>No milestones recorded yet</p>
+                    <!-- FIXED: Changed endpoint to api_add_milestone -->
+                    <a href="{{ url_for('api_add_milestone', child_id=child.id) }}" class="btn">Add First Milestone</a>
+                </div>
+            {% endif %}
         </div>
 
         <!-- TAB 2: Vaccinations -->
@@ -279,55 +400,49 @@
             </div>
 
             <div class="vaccine-list">
-                <!-- Vaccine Item 1 - Completed -->
-                <div class="vaccine-item completed" onclick="toggleVaccine(this)">
-                    <input type="checkbox" class="vaccine-checkbox-input" checked onclick="event.stopPropagation();">
-                    <div class="vaccine-info">
-                        <h3>BCG (Tuberculosis)</h3>
-                        <p>Due: At birth • Given: 16 Jan 2023</p>
+                {% if vaccinations %}
+                    {% for vaccine in vaccinations %}
+                    <div class="vaccine-item 
+                        {% if vaccine.status == 'completed' %}completed
+                        {% elif vaccine.due_date|string < today|string %}overdue
+                        {% else %}upcoming{% endif %}">
+                        
+                        <input type="checkbox" 
+                               class="vaccine-checkbox-input" 
+                               {% if vaccine.status == 'completed' %}checked{% endif %}
+                               onclick="markVaccine({{ vaccine.id }}, this.checked)">
+                        
+                        <div class="vaccine-info">
+                            <h3>{{ vaccine.vaccine_name }}</h3>
+                            <p>
+                                Due: {{ vaccine.due_date }}
+                                {% if vaccine.given_date %}
+                                    • Given: {{ vaccine.given_date }}
+                                {% elif vaccine.due_date|string < today|string %}
+                                    • Overdue
+                                {% endif %}
+                            </p>
+                        </div>
+                        
+                        <span class="vaccine-status 
+                            {% if vaccine.status == 'completed' %}done
+                            {% elif vaccine.due_date|string < today|string %}overdue
+                            {% else %}pending{% endif %}">
+                            {% if vaccine.status == 'completed' %}
+                                ✓ Completed
+                            {% elif vaccine.due_date|string < today|string %}
+                                ⚠️ Overdue
+                            {% else %}
+                                Upcoming
+                            {% endif %}
+                        </span>
                     </div>
-                    <span class="vaccine-status done">✓ Completed</span>
-                </div>
-
-                <!-- Vaccine Item 2 - Completed -->
-                <div class="vaccine-item completed" onclick="toggleVaccine(this)">
-                    <input type="checkbox" class="vaccine-checkbox-input" checked onclick="event.stopPropagation();">
-                    <div class="vaccine-info">
-                        <h3>Hepatitis B - 1st Dose</h3>
-                        <p>Due: At birth • Given: 16 Jan 2023</p>
+                    {% endfor %}
+                {% else %}
+                    <div class="empty-state">
+                        <p>No vaccination records found.</p>
                     </div>
-                    <span class="vaccine-status done">✓ Completed</span>
-                </div>
-
-                <!-- Vaccine Item 3 - Upcoming -->
-                <div class="vaccine-item upcoming" onclick="toggleVaccine(this)">
-                    <input type="checkbox" class="vaccine-checkbox-input" onclick="event.stopPropagation();">
-                    <div class="vaccine-info">
-                        <h3>MMR (Measles, Mumps, Rubella)</h3>
-                        <p>Due: 15 Apr 2024 (at 15 months)</p>
-                    </div>
-                    <span class="vaccine-status pending">Upcoming</span>
-                </div>
-
-                <!-- Vaccine Item 4 - Overdue -->
-                <div class="vaccine-item overdue" onclick="toggleVaccine(this)">
-                    <input type="checkbox" class="vaccine-checkbox-input" onclick="event.stopPropagation();">
-                    <div class="vaccine-info">
-                        <h3>DPT - 3rd Dose</h3>
-                        <p>Due: 15 Sep 2023 • Overdue by 4 months</p>
-                    </div>
-                    <span class="vaccine-status overdue">⚠️ Overdue</span>
-                </div>
-
-                <!-- Vaccine Item 5 -->
-                <div class="vaccine-item upcoming" onclick="toggleVaccine(this)">
-                    <input type="checkbox" class="vaccine-checkbox-input" onclick="event.stopPropagation();">
-                    <div class="vaccine-info">
-                        <h3>Polio - 3rd Dose</h3>
-                        <p>Due: 15 May 2024</p>
-                    </div>
-                    <span class="vaccine-status pending">Upcoming</span>
-                </div>
+                {% endif %}
             </div>
         </div>
 
@@ -362,28 +477,40 @@
             buttons[tabNumber - 1].classList.add('active');
         }
 
-        function toggleVaccine(vaccineItem) {
-            // Find the checkbox inside this vaccine item
-            const checkbox = vaccineItem.querySelector('.vaccine-checkbox-input');
-            const statusBadge = vaccineItem.querySelector('.vaccine-status');
-            
-            // Toggle the checkbox
-            checkbox.checked = !checkbox.checked;
-            
-            // Update the visual style based on checkbox state
-            if (checkbox.checked) {
-                // Mark as completed
-                vaccineItem.classList.remove('upcoming', 'overdue');
-                vaccineItem.classList.add('completed');
-                statusBadge.textContent = '✓ Completed';
-                statusBadge.className = 'vaccine-status done';
-            } else {
-                // Mark as pending
-                vaccineItem.classList.remove('completed', 'overdue');
-                vaccineItem.classList.add('upcoming');
-                statusBadge.textContent = 'Pending';
-                statusBadge.className = 'vaccine-status pending';
+        function markVaccine(vaccineId, isChecked) {
+            if (!isChecked) {
+                alert('To unmark a vaccine, please contact your administrator.');
+                location.reload();
+                return;
             }
+
+            // Send to backend to save
+            fetch('/api/vaccination/mark-given', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    vaccination_id: vaccineId,
+                    given_date: new Date().toISOString().split('T')[0]
+                })
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log('Vaccine updated:', data);
+                alert('Vaccination marked as completed!');
+                location.reload();
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Failed to update vaccination status. Please try again.');
+                location.reload();
+            });
         }
     </script>
 </body>

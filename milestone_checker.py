@@ -1,234 +1,166 @@
 """
-WHO Milestone Checker
-Compares child's milestones against WHO standards
+WHO Milestone Standards & Risk Assessment
+Based on CDC & WHO developmental milestones
 """
 
-# WHO MILESTONE STANDARDS (in months)
-WHO_MILESTONES = {
-    "motor": {
-        "lifts_head": {
-            "name": "Lifts head when on tummy",
-            "normal_age_months": 1,
-            "delay_threshold_months": 3
-        },
-        "holds_head_steady": {
-            "name": "Holds head steady",
-            "normal_age_months": 2,
-            "delay_threshold_months": 4
-        },
-        "sits_with_support": {
-            "name": "Sits with support",
-            "normal_age_months": 4,
-            "delay_threshold_months": 6
-        },
-        "sits_without_support": {
-            "name": "Sits without support",
-            "normal_age_months": 6,
-            "delay_threshold_months": 9
-        },
-        "crawls": {
-            "name": "Crawls",
-            "normal_age_months": 8,
-            "delay_threshold_months": 12
-        },
-        "stands_with_support": {
-            "name": "Stands with support",
-            "normal_age_months": 9,
-            "delay_threshold_months": 14
-        },
-        "walks_independently": {
-            "name": "Walks independently",
-            "normal_age_months": 12,
-            "delay_threshold_months": 18
-        },
-        "runs": {
-            "name": "Runs",
-            "normal_age_months": 18,
-            "delay_threshold_months": 24
-        }
+# WHO Standard Milestones (age in months)
+MILESTONE_STANDARDS = {
+    "Motor": {
+        "Holds head steady": {"min": 2, "max": 4, "typical": 3},
+        "Sits without support": {"min": 4, "max": 8, "typical": 6},
+        "Crawls": {"min": 6, "max": 10, "typical": 8},
+        "Pulls to stand": {"min": 7, "max": 12, "typical": 9},
+        "Walks independently": {"min": 9, "max": 18, "typical": 12},
+        "Runs": {"min": 13, "max": 24, "typical": 18},
+        "Jumps": {"min": 16, "max": 30, "typical": 24},
     },
-    
-    "speech": {
-        "coos_gurgles": {
-            "name": "Coos and gurgles",
-            "normal_age_months": 2,
-            "delay_threshold_months": 4
-        },
-        "babbles": {
-            "name": "Babbles (ba-ba, ma-ma)",
-            "normal_age_months": 6,
-            "delay_threshold_months": 10
-        },
-        "says_first_words": {
-            "name": "Says first words",
-            "normal_age_months": 12,
-            "delay_threshold_months": 18
-        },
-        "two_word_phrases": {
-            "name": "Says 2-word phrases",
-            "normal_age_months": 24,
-            "delay_threshold_months": 30
-        },
-        "simple_sentences": {
-            "name": "Speaks in simple sentences",
-            "normal_age_months": 36,
-            "delay_threshold_months": 42
-        }
+    "Speech": {
+        "Coos and babbles": {"min": 2, "max": 6, "typical": 4},
+        "Says first words": {"min": 10, "max": 15, "typical": 12},
+        "Says 2-word phrases": {"min": 16, "max": 24, "typical": 20},
+        "Says simple sentences": {"min": 24, "max": 36, "typical": 30},
+        "Tells stories": {"min": 36, "max": 48, "typical": 42},
     },
-    
-    "social": {
-        "smiles_at_people": {
-            "name": "Smiles at people",
-            "normal_age_months": 2,
-            "delay_threshold_months": 4
-        },
-        "laughs": {
-            "name": "Laughs",
-            "normal_age_months": 4,
-            "delay_threshold_months": 6
-        },
-        "responds_to_name": {
-            "name": "Responds to name",
-            "normal_age_months": 9,
-            "delay_threshold_months": 12
-        },
-        "plays_peekaboo": {
-            "name": "Plays simple games (peek-a-boo)",
-            "normal_age_months": 12,
-            "delay_threshold_months": 18
-        },
-        "shows_affection": {
-            "name": "Shows affection to familiar people",
-            "normal_age_months": 18,
-            "delay_threshold_months": 24
-        },
-        "plays_with_others": {
-            "name": "Plays with other children",
-            "normal_age_months": 24,
-            "delay_threshold_months": 30
-        }
+    "Social": {
+        "Smiles at people": {"min": 1, "max": 3, "typical": 2},
+        "Recognizes familiar faces": {"min": 3, "max": 6, "typical": 4},
+        "Shows affection": {"min": 6, "max": 12, "typical": 9},
+        "Plays with other children": {"min": 18, "max": 30, "typical": 24},
+        "Shows independence": {"min": 24, "max": 36, "typical": 30},
     },
-    
-    "cognitive": {
-        "reaches_for_toys": {
-            "name": "Reaches for toys",
-            "normal_age_months": 4,
-            "delay_threshold_months": 6
-        },
-        "finds_hidden_objects": {
-            "name": "Finds hidden objects",
-            "normal_age_months": 8,
-            "delay_threshold_months": 12
-        },
-        "points_at_objects": {
-            "name": "Points at objects to show interest",
-            "normal_age_months": 12,
-            "delay_threshold_months": 18
-        },
-        "sorts_shapes": {
-            "name": "Sorts shapes and colors",
-            "normal_age_months": 24,
-            "delay_threshold_months": 30
-        },
-        "understands_counting": {
-            "name": "Understands counting",
-            "normal_age_months": 36,
-            "delay_threshold_months": 42
-        }
+    "Cognitive": {
+        "Follows moving objects": {"min": 2, "max": 4, "typical": 3},
+        "Recognizes familiar objects": {"min": 6, "max": 10, "typical": 8},
+        "Points at objects": {"min": 9, "max": 15, "typical": 12},
+        "Sorts shapes and colors": {"min": 18, "max": 30, "typical": 24},
+        "Understands time concepts": {"min": 30, "max": 42, "typical": 36},
     }
 }
 
 
 def check_milestone_status(category, milestone_name, child_age_months, achieved):
     """
-    Compare child's milestone with WHO standards
+    Check if milestone achievement is on track, delayed, or at risk
     
-    Args:
-        category: 'motor', 'speech', 'social', or 'cognitive'
-        milestone_name: key from WHO_MILESTONES dict
-        child_age_months: child's current age in months
-        achieved: True if child has achieved this milestone
-        
-    Returns:
-        risk_level: 'normal', 'mild_delay', 'high_risk', 'achieved_late', 'too_early'
+    Returns: "on_track", "mild_delay", or "high_risk"
     """
     
-    # Get the milestone standard
-    standard = WHO_MILESTONES.get(category, {}).get(milestone_name)
+    # If achieved, check if within normal range
+    if achieved:
+        return "on_track"
     
-    if not standard:
+    # If NOT achieved, check against standards
+    if category not in MILESTONE_STANDARDS:
         return "unknown"
     
-    normal_age = standard["normal_age_months"]
-    delay_threshold = standard["delay_threshold_months"]
+    if milestone_name not in MILESTONE_STANDARDS[category]:
+        return "unknown"
     
-    if achieved:
-        # Child HAS achieved the milestone
-        if child_age_months <= delay_threshold:
-            return "normal"
-        else:
-            return "achieved_late"
-    else:
-        # Child has NOT achieved the milestone yet
-        if child_age_months < normal_age:
-            # Too early to expect this milestone
-            return "too_early"
-        elif child_age_months < delay_threshold:
-            # Mild concern - past normal age but before threshold
-            return "mild_delay"
-        else:
-            # Past delay threshold - high risk
-            return "high_risk"
-
-
-def get_all_milestones():
-    """
-    Get all available milestones organized by category
-    Returns dict with full milestone info
-    """
-    return WHO_MILESTONES
+    standard = MILESTONE_STANDARDS[category][milestone_name]
+    
+    # High risk: Child is past maximum expected age
+    if child_age_months > standard["max"]:
+        return "high_risk"
+    
+    # Mild delay: Child is past typical age but before max
+    if child_age_months > standard["typical"]:
+        return "mild_delay"
+    
+    # Still within normal range
+    return "on_track"
 
 
 def get_milestones_for_age(age_months):
     """
-    Get recommended milestones to check for a given age
-    Returns list of milestones expected around this age
+    Get expected milestones for a given age
+    Returns list of milestones the child should be working on
     """
-    relevant_milestones = []
+    expected = []
     
-    for category, milestones in WHO_MILESTONES.items():
-        for key, data in milestones.items():
-            # Include milestones within ±2 months of normal age
-            if abs(data["normal_age_months"] - age_months) <= 2:
-                relevant_milestones.append({
+    for category, milestones in MILESTONE_STANDARDS.items():
+        for milestone_name, ages in milestones.items():
+            # Include if child's age is within the range
+            if ages["min"] <= age_months <= ages["max"] + 6:  # +6 months buffer
+                expected.append({
                     "category": category,
-                    "key": key,
-                    "name": data["name"],
-                    "normal_age": data["normal_age_months"]
+                    "milestone": milestone_name,
+                    "typical_age": ages["typical"],
+                    "max_age": ages["max"],
+                    "status": "expected" if age_months <= ages["typical"] else "overdue"
                 })
     
-    return relevant_milestones
+    return expected
 
 
-# Test function
-if __name__ == "__main__":
-    # Test cases
-    print("Testing milestone checker...\n")
+def get_all_milestones():
+    """Get all available milestones"""
+    all_milestones = []
     
-    # Test 1: Normal - 3 month old holds head steady
-    result = check_milestone_status("motor", "holds_head_steady", 3, True)
-    print(f"Test 1: 3-month-old holds head steady = {result}")
+    for category, milestones in MILESTONE_STANDARDS.items():
+        for milestone_name, ages in milestones.items():
+            all_milestones.append({
+                "category": category,
+                "name": milestone_name,
+                "typical_age": ages["typical"],
+                "min_age": ages["min"],
+                "max_age": ages["max"]
+            })
     
-    # Test 2: Mild delay - 7 month old not sitting without support
-    result = check_milestone_status("motor", "sits_without_support", 7, False)
-    print(f"Test 2: 7-month-old not sitting = {result}")
+    return all_milestones
+
+
+def get_risk_assessment(child_milestones, child_age_months):
+    """
+    Analyze all milestones for a child and provide risk assessment
     
-    # Test 3: High risk - 10 month old not sitting without support
-    result = check_milestone_status("motor", "sits_without_support", 10, False)
-    print(f"Test 3: 10-month-old not sitting = {result}")
+    Args:
+        child_milestones: List of milestone records from database
+        child_age_months: Current age of child in months
+        
+    Returns:
+        dict with overall_risk, concerns, and recommendations
+    """
+    high_risk_count = 0
+    mild_delay_count = 0
+    concerns = []
     
-    # Test 4: Too early - 4 month old not walking
-    result = check_milestone_status("motor", "walks_independently", 4, False)
-    print(f"Test 4: 4-month-old not walking = {result}")
+    # Check each category
+    for category in MILESTONE_STANDARDS.keys():
+        category_milestones = [m for m in child_milestones if m['category'] == category]
+        
+        # Count delays in this category
+        category_high_risk = len([m for m in category_milestones if m.get('risk_level') == 'high_risk'])
+        category_mild_delay = len([m for m in category_milestones if m.get('risk_level') == 'mild_delay'])
+        
+        high_risk_count += category_high_risk
+        mild_delay_count += category_mild_delay
+        
+        if category_high_risk > 0:
+            concerns.append(f"⚠️ {category_high_risk} high-risk delays in {category}")
+        elif category_mild_delay > 0:
+            concerns.append(f"⚡ {category_mild_delay} mild delays in {category}")
     
-    print("\n✓ Milestone checker working!")
+    # Overall assessment
+    if high_risk_count >= 2:
+        overall_risk = "high"
+        recommendation = "🚨 URGENT: Consult pediatrician immediately for developmental screening"
+    elif high_risk_count == 1:
+        overall_risk = "medium"
+        recommendation = "⚠️ Schedule pediatrician visit within 2 weeks"
+    elif mild_delay_count >= 3:
+        overall_risk = "medium"
+        recommendation = "📋 Monitor closely and discuss with pediatrician at next visit"
+    elif mild_delay_count >= 1:
+        overall_risk = "low"
+        recommendation = "📊 Continue monitoring, mention to pediatrician"
+    else:
+        overall_risk = "none"
+        recommendation = "✅ Development appears on track!"
+    
+    return {
+        "overall_risk": overall_risk,
+        "high_risk_count": high_risk_count,
+        "mild_delay_count": mild_delay_count,
+        "concerns": concerns,
+        "recommendation": recommendation
+    }
