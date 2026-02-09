@@ -164,55 +164,46 @@
             <p class="form-subtitle">Record a developmental milestone for Aarav Kumar</p>
             
             <form action="{{ url_for('api_add_milestone') }}" method="POST">
-    <input type="hidden" name="child_id" value="1">
-                <div class="form-group">
-                    <label for="age_months">Child's Age (months) *</label>
-                    <input type="number" id="age_months" name="age_months" required placeholder="e.g., 12">
-                </div>
-
-                <div class="form-group">
-                    <label for="category">Category *</label>
-                    <select id="category" name="category" required>
-                        <option value="">Select category...</option>
-                        <option value="Motor">Motor Skills</option>
-                        <option value="Speech">Speech & Language</option>
-                        <option value="Social">Social & Emotional</option>
-                        <option value="Cognitive">Cognitive</option>
-                    </select>
-                </div>
-
-                <div class="form-group">
-                    <label for="milestone">Milestone *</label>
-                    <select id="milestone" name="milestone_name" required>
-                        <option value="">Select milestone...</option>
-                        <option value="Sits without support">Sits without support</option>
-                        <option value="Crawls">Crawls</option>
-                        <option value="Walks">Walks independently</option>
-                        <option value="First words">Says first words</option>
-                        <option value="Points">Points at objects</option>
-                        <option value="Drinks from cup">Drinks from cup</option>
-                    </select>
-                </div>
-
-                <div class="form-group">
-                    <label>Achieved? *</label>
-                    <div class="radio-group">
-                        <label>
-                            <input type="radio" name="achieved" value="yes" required> Yes
-                        </label>
-                        <label>
-                            <input type="radio" name="achieved" value="no" required> No
-                        </label>
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label for="notes">Notes (optional)</label>
-                    <textarea id="notes" name="notes" rows="3" placeholder="Any additional observations..."></textarea>
-                </div>
-
-                <button type="submit" class="btn">Save Milestone</button>
-            </form>
+    <!-- ✅ ADD THIS HIDDEN FIELD -->
+    <input type="hidden" name="child_id" value="{{ child_id }}">
+    
+    <!-- Rest of your form fields... -->
+    <div class="form-group">
+        <label for="category">Category *</label>
+        <select id="category" name="category" required>
+            <option value="">Select category...</option>
+            <option value="Motor">Motor Skills</option>
+            <option value="Speech">Speech & Language</option>
+            <option value="Social">Social & Emotional</option>
+            <option value="Cognitive">Cognitive</option>
+        </select>
+    </div>
+    
+    <div class="form-group">
+        <label for="milestone">Milestone *</label>
+        <select id="milestone" name="milestone_name" required>
+            <option value="">Select milestone...</option>
+            <option value="Sits without support">Sits without support</option>
+            <option value="Crawls">Crawls</option>
+            <option value="Walks">Walks independently</option>
+            <option value="First words">Says first words</option>
+        </select>
+    </div>
+    
+    <div class="form-group">
+        <label>Achieved? *</label>
+        <div class="radio-group">
+            <label>
+                <input type="radio" name="achieved" value="yes" required> Yes
+            </label>
+            <label>
+                <input type="radio" name="achieved" value="no" required> No
+            </label>
+        </div>
+    </div>
+    
+    <button type="submit" class="btn">Save Milestone</button>
+</form>
         </div>
     </div>
 </body>

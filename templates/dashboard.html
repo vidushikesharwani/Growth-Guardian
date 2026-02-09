@@ -250,7 +250,7 @@
 
             <div class="child-actions">
                 <a href="{{ url_for('child_detail', child_id=child.id) }}" class="btn btn-small btn-secondary">View Details</a>
-                <a href="{{ url_for('add_milestone_page') }}?child_id={{ child.id }}" class="btn btn-small">Add Milestone</a>
+                <a href="{{ url_for('add_milestone_page', child_id=child.id) }}" class="btn btn-small">Add Milestone</a>
             </div>
         </div>
         {% endfor %}
