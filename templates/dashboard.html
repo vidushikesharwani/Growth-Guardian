@@ -38,11 +38,20 @@
             margin: 0;
         }
 
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+        }
+
         .nav-links a {
-            margin-left: 2rem;
             text-decoration: none;
             color: #667eea;
             font-weight: 600;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: #764ba2;
         }
 
         .container {
@@ -186,31 +195,25 @@
 <body>
     <nav class="navbar">
         <div style="display: flex; align-items: center; gap: 0.5rem;">
-   <img src="logo1.png.jpeg" alt="Growth Guardian Logo" style="height: 40px;">
-    <h2>Growth Guardian</h2>
-</div>
-        <nav class="navbar">
-    <div style="display: flex; align-items: center; gap: 0.5rem;">
-        <img src="{{ url_for('static', filename='logo1.png.jpeg') }}" alt="Growth Guardian Logo" style="height: 40px;">
-        <h2 style="color: #667eea; margin: 0;">Growth Guardian</h2>
-    </div>
-    <div class="nav-links">
-        <a href="{{ url_for('index') }}">Home</a>
-        <a href="{{ url_for('add_child') }}">Add Child</a>
-       
-        <a href="{{ url_for('consultation') }}">Consult Doctor</a>
-    </div>
-</nav>
-
+            <img src="{{ url_for('static', filename='logo1.png.jpeg') }}" alt="Growth Guardian Logo" style="height: 40px;">
+            <h2 style="color: #667eea; margin: 0;">Growth Guardian</h2>
+        </div>
+        <div class="nav-links">
+            <a href="{{ url_for('index') }}">Home</a>
+            <a href="{{ url_for('add_child') }}">Add Child</a>
+            <a href="{{ url_for('dashboard') }}">Dashboard</a>
+            <a href="{{ url_for('consultation') }}">Consult Doctor</a>
+        </div>
     </nav>
 
     <div class="container">
         <div class="dashboard-header">
             <h2>Children Dashboard</h2>
-            <a href="add_child.html" class="btn">+ Add New Child</a>
+            <a href="{{ url_for('add_child') }}" class="btn">+ Add New Child</a>
         </div>
 
         <div class="children-grid">
+            <!-- Child 1: Aarav Kumar -->
             <div class="child-card">
                 <div class="child-header">
                     <div class="child-avatar">👦</div>
@@ -236,11 +239,12 @@
                 </div>
 
                 <div class="child-actions">
-                    <a href="child_detail.html" class="btn btn-small btn-secondary">View Details</a>
-                    <a href="add_milestone.html" class="btn btn-small">Add Milestone</a>
+                    <a href="{{ url_for('child_detail', child_id=1) }}" class="btn btn-small btn-secondary">View Details</a>
+                    <a href="/child/1/add_milestone" class="btn btn-small">Add Milestone</a>
                 </div>
             </div>
 
+            <!-- Child 2: Priya Sharma -->
             <div class="child-card">
                 <div class="child-header">
                     <div class="child-avatar">👧</div>
@@ -266,11 +270,12 @@
                 </div>
 
                 <div class="child-actions">
-                    <a href="child_detail.html" class="btn btn-small btn-secondary">View Details</a>
-                    <a href="add_milestone.html" class="btn btn-small">Add Milestone</a>
+                    <a href="{{ url_for('child_detail', child_id=2) }}" class="btn btn-small btn-secondary">View Details</a>
+                    <a href="/child/2/add_milestone" class="btn btn-small">Add Milestone</a>
                 </div>
             </div>
 
+            <!-- Child 3: Rohan Patel -->
             <div class="child-card">
                 <div class="child-header">
                     <div class="child-avatar">👦</div>
@@ -296,8 +301,8 @@
                 </div>
 
                 <div class="child-actions">
-                    <a href="child_detail.html" class="btn btn-small btn-secondary">View Details</a>
-                    <a href="add_milestone.html" class="btn btn-small">Add Milestone</a>
+                    <a href="{{ url_for('child_detail', child_id=3) }}" class="btn btn-small btn-secondary">View Details</a>
+                    <a href="/child/3/add_milestone" class="btn btn-small">Add Milestone</a>
                 </div>
             </div>
         </div>

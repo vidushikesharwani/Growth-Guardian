@@ -124,12 +124,12 @@
 <body>
     <nav class="navbar">
        <div style="display: flex; align-items: center; gap: 0.5rem;">
-    <img src="logo1.png.jpeg" alt="Growth Guardian Logo" style="height: 40px;">
+   <img src="{{ url_for('static', filename='logo1.png.jpeg') }}" alt="Growth Guardian Logo" style="height: 40px;">
     <h2>Growth Guardian</h2>
 </div>
         <div class="nav-links">
   <a href="{{ url_for('home') }}">Home</a>
-  <a href="{{ url_for('add_child') }}">Add Child</a>
+  
   <a href="{{ url_for('dashboard') }}">Dashboard</a>
   <a href="{{ url_for('consultation') }}">Consult Doctor</a>
 </div>
