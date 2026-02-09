@@ -213,98 +213,56 @@
         </div>
 
         <div class="children-grid">
-            <!-- Child 1: Aarav Kumar -->
-            <div class="child-card">
-                <div class="child-header">
-                    <div class="child-avatar">👦</div>
-                    <div class="child-info">
-                        <h3>Aarav Kumar</h3>
-                        <p class="child-age">1 year 2 months</p>
-                    </div>
+    {% if children and children|length > 0 %}
+        {% for child in children %}
+        <div class="child-card">
+            <div class="child-header">
+                <div class="child-avatar">
+                    {% if child.gender == 'Male' %}👦{% else %}👧{% endif %}
                 </div>
-                
-                <div class="child-details">
-                    <div class="detail-item">
-                        <span class="detail-label">DOB:</span>
-                        <span>15 Jan 2023</span>
-                    </div>
-                    <div class="detail-item">
-                        <span class="detail-label">Gender:</span>
-                        <span>Male</span>
-                    </div>
-                    <div class="detail-item">
-                        <span class="detail-label">Status:</span>
-                        <span class="status-badge status-normal">✅ All Normal</span>
-                    </div>
+                <div class="child-info">
+                    <h3>{{ child.name }}</h3>
+                    <p class="child-age">
+                        {% if child.age_months >= 12 %}
+                            {{ child.age_months // 12 }} year{{ 's' if child.age_months // 12 != 1 else '' }} 
+                            {{ child.age_months % 12 }} month{{ 's' if child.age_months % 12 != 1 else '' }}
+                        {% else %}
+                            {{ child.age_months }} month{{ 's' if child.age_months != 1 else '' }}
+                        {% endif %}
+                    </p>
                 </div>
-
-                <div class="child-actions">
-                    <a href="{{ url_for('child_detail', child_id=1) }}" class="btn btn-small btn-secondary">View Details</a>
-                    <a href="/child/1/add_milestone" class="btn btn-small">Add Milestone</a>
+            </div>
+            
+            <div class="child-details">
+                <div class="detail-item">
+                    <span class="detail-label">DOB:</span>
+                    <span>{{ child.date_of_birth }}</span>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-label">Gender:</span>
+                    <span>{{ child.gender }}</span>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-label">Status:</span>
+                    <span class="status-badge status-normal">✅ All Normal</span>
                 </div>
             </div>
 
-            <!-- Child 2: Priya Sharma -->
-            <div class="child-card">
-                <div class="child-header">
-                    <div class="child-avatar">👧</div>
-                    <div class="child-info">
-                        <h3>Priya Sharma</h3>
-                        <p class="child-age">8 months</p>
-                    </div>
-                </div>
-                
-                <div class="child-details">
-                    <div class="detail-item">
-                        <span class="detail-label">DOB:</span>
-                        <span>10 Jun 2024</span>
-                    </div>
-                    <div class="detail-item">
-                        <span class="detail-label">Gender:</span>
-                        <span>Female</span>
-                    </div>
-                    <div class="detail-item">
-                        <span class="detail-label">Status:</span>
-                        <span class="status-badge status-warning">⚠️ Mild Delay</span>
-                    </div>
-                </div>
-
-                <div class="child-actions">
-                    <a href="{{ url_for('child_detail', child_id=2) }}" class="btn btn-small btn-secondary">View Details</a>
-                    <a href="/child/2/add_milestone" class="btn btn-small">Add Milestone</a>
-                </div>
+            <div class="child-actions">
+                <a href="{{ url_for('child_detail', child_id=child.id) }}" class="btn btn-small btn-secondary">View Details</a>
+                <a href="{{ url_for('add_milestone_page') }}?child_id={{ child.id }}" class="btn btn-small">Add Milestone</a>
             </div>
-
-            <!-- Child 3: Rohan Patel -->
-            <div class="child-card">
-                <div class="child-header">
-                    <div class="child-avatar">👦</div>
-                    <div class="child-info">
-                        <h3>Rohan Patel</h3>
-                        <p class="child-age">2 years 4 months</p>
-                    </div>
-                </div>
-                
-                <div class="child-details">
-                    <div class="detail-item">
-                        <span class="detail-label">DOB:</span>
-                        <span>20 Sep 2022</span>
-                    </div>
-                    <div class="detail-item">
-                        <span class="detail-label">Gender:</span>
-                        <span>Male</span>
-                    </div>
-                    <div class="detail-item">
-                        <span class="detail-label">Status:</span>
-                        <span class="status-badge status-normal">✅ All Normal</span>
-                    </div>
-                </div>
-
-                <div class="child-actions">
-                    <a href="{{ url_for('child_detail', child_id=3) }}" class="btn btn-small btn-secondary">View Details</a>
-                    <a href="/child/3/add_milestone" class="btn btn-small">Add Milestone</a>
-                </div>
-            </div>
+        </div>
+        {% endfor %}
+    {% else %}
+        <div class="empty-state">
+            <div class="empty-icon">👶</div>
+            <h3>No children added yet</h3>
+            <p>Start by adding your first child profile</p>
+            <a href="{{ url_for('add_child') }}" class="btn btn-primary">Add First Child</a>
+        </div>
+    {% endif %}
+</div>
         </div>
     </div>
 </body>
