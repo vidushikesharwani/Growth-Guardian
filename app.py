@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify, render_template
+from flask import Flask, request, jsonify, render_template , redirect
 from flask_cors import CORS
 import sqlite3
 from datetime import datetime, date, timedelta
@@ -154,7 +154,7 @@ def api_get_children():
 @app.route('/api/child', methods=['POST'])
 def api_add_child():
     """Add a new child"""
-    data = request.json
+    data = request.form
     
     conn = get_db()
     cursor = conn.cursor()
@@ -172,7 +172,8 @@ def api_add_child():
     conn.commit()
     conn.close()
     
-    return jsonify({'id': child_id, 'status': 'success'})
+    from flask import redirect
+    return redirect('/dashboard')
 
 
 @app.route('/api/child/<int:child_id>', methods=['GET'])
