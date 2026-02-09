@@ -468,6 +468,215 @@ def api_get_alerts(child_id):
     alerts = get_alerts_for_child(child_id)
     return jsonify(alerts)
 
+# ===== AI CHATBOT ROUTES =====
+
+@app.route('/chatbot')
+def chatbot():
+    """AI Chatbot page"""
+    return render_template('chatbot.html')
+
+
+@app.route('/api/chatbot', methods=['POST'])
+def api_chatbot():
+    """Handle chatbot queries"""
+    data = request.json
+    user_message = data.get('message', '').lower()
+    
+    # Simple rule-based responses
+    response = generate_chatbot_response(user_message)
+    
+    return jsonify({
+        'response': response,
+        'timestamp': datetime.now().strftime('%H:%M')
+    })
+
+
+def generate_chatbot_response(message):
+    """Generate chatbot response based on WHO rules"""
+    
+    # Milestone-related queries
+    if any(word in message for word in ['crawl', 'crawling']):
+        return """🚼 **Crawling Milestone:**
+        
+**Normal Age:** 8-10 months
+**Delay Threshold:** 12 months
+
+✅ **Don't worry if:**
+- Your baby is 6-11 months old
+- They're showing other motor skills (sitting, rolling)
+
+⚠️ **Consult doctor if:**
+- Not crawling by 12 months
+- No other motor progress
+- Cannot sit without support
+
+💡 **Tip:** Some babies skip crawling and go straight to walking - this is normal!"""
+    
+    elif any(word in message for word in ['walk', 'walking']):
+        return """👶 **Walking Milestone:**
+        
+**Normal Age:** 12-15 months
+**Delay Threshold:** 18 months
+
+✅ **Normal if:**
+- Walking independently by 15 months
+- Cruising (walking with support) before that
+
+⚠️ **Consult doctor if:**
+- Not walking by 18 months
+- Cannot stand with support by 12 months
+- Favors one side of body
+
+💡 **Tip:** Every child develops at their own pace. Range is 9-18 months!"""
+    
+    elif any(word in message for word in ['talk', 'talking', 'speak', 'speaking', 'words', 'speech']):
+        return """🗣️ **Speech Milestone:**
+        
+**First Words:** 12-18 months
+**Two-word phrases:** 18-24 months
+**Simple sentences:** 24-36 months
+
+✅ **Normal if:**
+- Babbling at 6 months
+- First words by 15 months
+- Using gestures to communicate
+
+⚠️ **Consult doctor if:**
+- No babbling by 12 months
+- No words by 18 months
+- Not combining words by 24 months
+
+💡 **Tip:** Read to your child daily - it helps language development!"""
+    
+    elif any(word in message for word in ['sit', 'sitting']):
+        return """🪑 **Sitting Milestone:**
+        
+**With Support:** 4-6 months
+**Without Support:** 6-8 months
+**Delay Threshold:** 9 months
+
+✅ **Normal if:**
+- Sits with support by 6 months
+- Sits independently by 8 months
+
+⚠️ **Consult doctor if:**
+- Cannot sit even with support by 9 months
+- Falls over immediately when sitting
+- Very stiff or very floppy
+
+💡 **Tip:** Practice tummy time to strengthen core muscles!"""
+    
+    elif any(word in message for word in ['vaccine', 'vaccination', 'immunization']):
+        return """💉 **Vaccination Information:**
+        
+**Birth:** BCG, Hepatitis B, OPV-0
+**6 weeks:** DTaP-1, IPV-1, Hib-1, Rotavirus-1
+**10 weeks:** DTaP-2, IPV-2, Hib-2, Rotavirus-2
+**14 weeks:** DTaP-3, IPV-3, Hib-3, Rotavirus-3
+**9 months:** MMR-1, Typhoid
+**15 months:** MMR-2, Varicella
+
+⚠️ **Important:**
+- Vaccines are CRUCIAL for your child's health
+- Minor delays (1-2 weeks) are usually okay
+- Consult doctor if more than 1 month overdue
+
+💡 **Tip:** Keep vaccination card handy and set reminders!"""
+    
+    elif any(word in message for word in ['weight', 'growth', 'height']):
+        return """📊 **Growth Tracking:**
+        
+**Normal Growth Patterns:**
+- Doubles birth weight by 6 months
+- Triples birth weight by 1 year
+- Gains 150-200g per month after 6 months
+
+⚠️ **Consult doctor if:**
+- No weight gain for 2 consecutive months
+- Weight loss
+- Falling below growth curve
+
+💡 **Tip:** Track weight monthly in our Growth Guardian dashboard!"""
+    
+    elif any(word in message for word in ['delay', 'late', 'behind', 'slow']):
+        return """🔍 **Understanding Developmental Delays:**
+        
+**Mild Delay:**
+- 1-3 months behind expected age
+- Usually catches up with time
+- Monitor closely
+
+**Moderate Delay:**
+- 3-6 months behind
+- May need early intervention
+- Consult pediatrician
+
+**Significant Delay:**
+- 6+ months behind
+- Multiple areas affected
+- Requires specialist evaluation
+
+💡 **Action:** Use our milestone tracker to monitor progress regularly!"""
+    
+    elif any(word in message for word in ['doctor', 'consult', 'appointment']):
+        return """👨‍⚕️ **When to Consult a Doctor:**
+        
+**Urgent (Within 24 hours):**
+- High fever (>103°F)
+- Difficulty breathing
+- Excessive crying/irritability
+- Loss of consciousness
+
+**Soon (Within 1 week):**
+- Milestone delay beyond threshold
+- No weight gain for 2 months
+- Overdue vaccinations (>1 month)
+
+**Routine Check:**
+- Regular well-baby visits
+- Vaccination appointments
+- Growth monitoring
+
+💡 **Tip:** Use our "Consult Doctor" feature to book appointments!"""
+    
+    elif any(word in message for word in ['help', 'how', 'what']):
+        return """👋 **Hi! I'm Growth Guardian AI Assistant!**
+        
+I can help you with:
+✅ Milestone information (crawling, walking, talking, sitting)
+✅ Vaccination schedules
+✅ Growth tracking advice
+✅ When to consult a doctor
+✅ Understanding developmental delays
+
+**Try asking:**
+- "When should my baby walk?"
+- "What vaccines are due at 6 months?"
+- "My baby is not crawling at 10 months"
+- "When should I consult a doctor?"
+
+💡 Type your question above!"""
+    
+    else:
+        return """🤔 **I'm here to help!**
+        
+I can answer questions about:
+- 🚼 Milestones (crawling, walking, talking, sitting)
+- 💉 Vaccinations
+- 📊 Growth & development
+- 👨‍⚕️ When to see a doctor
+
+**Try asking:**
+- "When do babies start walking?"
+- "What vaccines at 6 months?"
+- "My child is not talking at 18 months"
+
+Type your question and I'll help! 😊"""
+
+
+# ===== END OF CHATBOT ROUTES =====
+
+
 # ===== RUN APP =====
 
 if __name__ == '__main__':
