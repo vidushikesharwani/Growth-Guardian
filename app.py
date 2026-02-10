@@ -679,7 +679,17 @@ Type your question and I'll help! 😊"""
 
 # ===== RUN APP =====
 
-if __name__ == '__main__':
+if __name__ == "__main__":
+    import os
+
+    port = int(os.environ.get("PORT", 5000))
+
+    print("🩺 Starting Growth Guardian Backend...")
+    print(f"📍 Server running on port {port}")
+
+    app.run(host="0.0.0.0", port=port)
+
+
     print("🩺 Starting Growth Guardian Backend...")
     print("📍 Server running at: http://127.0.0.1:5000")
     print("\nAvailable endpoints:")
@@ -697,4 +707,4 @@ if __name__ == '__main__':
     print("    GET  /api/child/<id>/vaccinations - Get vaccinations")
     print("\n")
     
-    app.run(debug=True, port=5000)
+
